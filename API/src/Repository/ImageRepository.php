@@ -81,4 +81,10 @@ class ImageRepository extends ServiceEntityRepository
     //            ->getOneOrNullResult()
     //        ;
     //    }
+    public function getAllImages(): array {
+        return $this->createQueryBuilder('i')
+            ->select('i.id, i.name, i.url')
+            ->getQuery()
+            ->getArrayResult();
+    }
 }
