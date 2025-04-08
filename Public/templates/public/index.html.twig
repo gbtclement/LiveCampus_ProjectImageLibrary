@@ -1,0 +1,519 @@
+{% extends 'base.html.twig' %}
+
+{% block stylesheets %}
+<style>
+    body {
+        font-family: 'Poppins', 'Segoe UI', sans-serif;
+        background-color: #fff;
+        margin: 0;
+        padding: 20px;
+        color: #333;
+    }
+
+    .container {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 20px;
+    }
+
+    h1 {
+        text-align: center;
+        font-size: 2.5rem;
+        margin-bottom: 30px;
+        background: linear-gradient(to right, #5271ff, #ff56a8);
+        -webkit-background-clip: text;
+        background-clip: text;
+        color: transparent;
+    }
+
+    h2 {
+        font-size: 1.8rem;
+        margin-bottom: 20px;
+        color: #444;
+    }
+
+    /* Upload section */
+    .upload-section {
+        margin-bottom: 40px;
+    }
+
+    .dropzone {
+        border: 2px dashed #ccc;
+        border-radius: 12px;
+        padding: 30px;
+        text-align: center;
+        background: transparent;
+        position: relative;
+        cursor: pointer;
+        transition: all 0.3s ease;
+    }
+
+    .dropzone:hover {
+        border-color: #5271ff;
+    }
+
+    .upload-icon {
+        width: 80px;
+        height: 80px;
+        margin-bottom: 15px;
+        fill: #ccc;
+    }
+
+    .dropzone-text {
+        font-size: 1.1rem;
+        color: #666;
+        margin-bottom: 25px;
+    }
+
+    .file-input-button {
+        background: #f1f1f1;
+        color: #333;
+        padding: 10px 20px;
+        border: none;
+        border-radius: 8px;
+        cursor: pointer;
+        font-weight: 500;
+        margin-bottom: 20px;
+        display: inline-flex;
+        align-items: center;
+        gap: 5px;
+    }
+
+    .file-input-button:hover {
+        background: #e5e5e5;
+    }
+    
+    .file-input {
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        top: 0;
+        left: 0;
+        opacity: 0;
+        cursor: pointer;
+    }
+
+    /* File Progress Bar */
+    .file-progress-container {
+        margin-top: 20px;
+        border: 1px solid #e0e0e0;
+        border-radius: 8px;
+        overflow: hidden;
+        /* Initially visible for testing, will be toggled by JS */
+        display: none; 
+    }
+
+    .file-progress-bar {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 10px 15px;
+        background-color: #f9f9f9;
+        border-bottom: 2px solid #4caf50;
+    }
+
+    .file-info {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+    }
+
+    .file-name {
+        font-weight: 500;
+        margin: 0;
+    }
+
+    .file-size {
+        color: #666;
+        font-size: 0.9rem;
+        margin: 0;
+    }
+
+    .file-actions {
+        display: flex;
+        gap: 10px;
+    }
+
+    .download-file-btn, .remove-file-btn {
+        background: none;
+        border: none;
+        cursor: pointer;
+        padding: 5px;
+        border-radius: 4px;
+        transition: background-color 0.2s;
+    }
+
+    .download-file-btn:hover {
+        background-color: #e3f2fd;
+    }
+
+    .remove-file-btn {
+        color: #ff3d00;
+    }
+
+    .remove-file-btn:hover {
+        background-color: #ffebee;
+    }
+    
+    .input-row {
+        display: flex;
+        gap: 15px;
+        margin-top: 20px;
+        align-items: center;
+    }
+
+    .name-input {
+        flex: 1;
+        padding: 12px 15px;
+        border: 1px solid #ddd;
+        border-radius: 12px;
+        font-size: 1rem;
+        transition: border-color 0.3s;
+    }
+
+    .name-input:focus {
+        outline: none;
+        border-color: #5271ff;
+    }
+
+    .upload-btn {
+        padding: 12px 25px;
+        border: none;
+        border-radius: 12px;
+        background: linear-gradient(to right, #5271ff, #ff56a8);
+        color: white;
+        font-weight: 500;
+        cursor: pointer;
+        transition: all 0.3s ease;
+    }
+
+    .upload-btn:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 5px 10px rgba(0, 0, 0, 0.1);
+    }
+
+    /* Gallery section */
+    .gallery {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+        gap: 25px;
+        margin-top: 30px;
+    }
+
+    .image-card {
+        position: relative;
+        border-radius: 12px;
+        overflow: hidden;
+        background: white;
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+        transition: transform 0.3s ease;
+    }
+
+    .image-card:hover {
+        transform: translateY(-5px);
+    }
+
+    .image-container {
+        position: relative;
+        height: 200px;
+        overflow: hidden;
+        border-radius: 12px 12px 0 0;
+    }
+
+    .image-container img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        transition: transform 0.5s ease;
+    }
+
+    .image-card:hover img {
+        transform: scale(1.05);
+    }
+
+    .image-info {
+        padding: 15px;
+        text-align: center;
+    }
+
+    .image-name {
+        margin: 0;
+        font-size: 1.1rem;
+        color: #333;
+    }
+
+    .download-btn {
+        position: absolute;
+        bottom: 60px;
+        left: 50%;
+        transform: translateX(-50%) translateY(20px);
+        opacity: 0;
+        padding: 8px 15px;
+        background: linear-gradient(to right, #5271ff, #ff56a8);
+        color: white;
+        border: none;
+        border-radius: 8px;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        font-weight: 600;
+    }
+
+    .image-card:hover .download-btn {
+        opacity: 1;
+        transform: translateX(-50%) translateY(0);
+    }
+</style>
+{% endblock %}
+
+{% block javascripts %}
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Sélection des éléments DOM
+        const fileInput = document.getElementById('form_imageFile');
+        const nameInput = document.getElementById('form_name');
+        const dropzone = document.querySelector('.dropzone');
+        const fileProgressContainer = document.querySelector('.file-progress-container');
+        const fileName = document.querySelector('.file-name');
+        const fileSize = document.querySelector('.file-size');
+        const removeFileBtn = document.querySelector('.remove-file-btn');
+
+        console.log('Elements sélectionnés:', {
+            fileInput: fileInput !== null,
+            nameInput: nameInput !== null,
+            dropzone: dropzone !== null,
+            fileProgressContainer: fileProgressContainer !== null,
+            fileName: fileName !== null,
+            fileSize: fileSize !== null,
+            removeFileBtn: removeFileBtn !== null
+        });
+        
+        // Format file size to KB, MB, etc.
+        function formatFileSize(bytes) {
+            if (bytes < 1024) return bytes + ' B';
+            else if (bytes < 1048576) return (bytes / 1024).toFixed(2) + ' KB';
+            else if (bytes < 1073741824) return (bytes / 1048576).toFixed(2) + ' MB';
+            else return (bytes / 1073741824).toFixed(2) + ' GB';
+        }
+        
+        // Show file info when selected
+        if (fileInput) {
+            fileInput.addEventListener('change', function() {
+                console.log('File input changed');
+                if (this.files && this.files.length > 0) {
+                    const file = this.files[0];
+                    console.log('File selected:', file.name, file.size);
+                    
+                    if (fileName) fileName.textContent = file.name;
+                    if (fileSize) fileSize.textContent = formatFileSize(file.size);
+                    if (fileProgressContainer) {
+                        console.log('Showing progress container');
+                        fileProgressContainer.style.display = 'block';
+                    }
+                    
+                    // Set default name from filename (without extension)
+                    const baseName = file.name.split('.').slice(0, -1).join('.');
+                    if (nameInput) nameInput.value = baseName;
+                }
+            });
+        }
+        
+        // Remove file when clicking the remove button
+        if (removeFileBtn) {
+            removeFileBtn.addEventListener('click', function() {
+                console.log('Remove button clicked');
+                if (fileInput) fileInput.value = '';
+                if (fileProgressContainer) fileProgressContainer.style.display = 'none';
+                if (nameInput) nameInput.value = '';
+            });
+        }
+        
+        // Handle drag and drop events
+        if (dropzone) {
+            ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(eventName => {
+                dropzone.addEventListener(eventName, preventDefaults, false);
+            });
+            
+            function preventDefaults(e) {
+                e.preventDefault();
+                e.stopPropagation();
+            }
+            
+            ['dragenter', 'dragover'].forEach(eventName => {
+                dropzone.addEventListener(eventName, highlight, false);
+            });
+            
+            ['dragleave', 'drop'].forEach(eventName => {
+                dropzone.addEventListener(eventName, unhighlight, false);
+            });
+            
+            function highlight() {
+                dropzone.classList.add('highlight');
+                dropzone.style.borderColor = '#5271ff';
+            }
+            
+            function unhighlight() {
+                dropzone.classList.remove('highlight');
+                dropzone.style.borderColor = '#ccc';
+            }
+            
+            dropzone.addEventListener('drop', handleDrop, false);
+            
+            function handleDrop(e) {
+                console.log('File dropped');
+                const dt = e.dataTransfer;
+                const files = dt.files;
+                
+                if (files.length > 0) {
+                    if (fileInput) fileInput.files = files;
+                    const file = files[0];
+                    console.log('Dropped file:', file.name, file.size);
+                    
+                    if (fileName) fileName.textContent = file.name;
+                    if (fileSize) fileSize.textContent = formatFileSize(file.size);
+                    if (fileProgressContainer) {
+                        console.log('Showing progress container after drop');
+                        fileProgressContainer.style.display = 'block';
+                    }
+                    
+                    // Set default name from filename (without extension)
+                    const baseName = file.name.split('.').slice(0, -1).join('.');
+                    if (nameInput) nameInput.value = baseName;
+                }
+            }
+        }
+        
+        // Handle download buttons in gallery
+        document.querySelectorAll('.download-btn').forEach(btn => {
+            btn.addEventListener('click', function() {
+                const imgUrl = this.dataset.url;
+                const imgName = this.dataset.name;
+                
+                // Create a temporary anchor to download the image
+                const link = document.createElement('a');
+                link.href = imgUrl;
+                link.download = imgName;
+                document.body.appendChild(link);
+                link.click();
+                document.body.removeChild(link);
+            });
+        });
+    });
+</script>
+{% endblock %}
+
+{% block body %}
+<div class="container">
+    <h1>Galerie publique</h1>
+    
+    <div class="upload-section">
+        <h2>Ajouter une image</h2>
+        
+        {{ form_start(form, {'attr': {'class': 'upload-form'}}) }}
+        
+        <div class="dropzone">
+            <svg class="upload-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                <path d="M19.35 10.04C18.67 6.59 15.64 4 12 4 9.11 4 6.6 5.64 5.35 8.04 2.34 8.36 0 10.91 0 14c0 3.31 2.69 6 6 6h13c2.76 0 5-2.24 5-5 0-2.64-2.05-4.78-4.65-4.96zM14 13v4h-4v-4H7l5-5 5 5h-3z"/>
+            </svg>
+            <p class="dropzone-text">Déposez des fichiers ici ou cliquez pour parcourir</p>
+            <label class="file-input-button">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                    <polyline points="17 8 12 3 7 8"></polyline>
+                    <line x1="12" y1="3" x2="12" y2="15"></line>
+                </svg>
+                Choisissez un fichier
+            </label>
+            {{ form_widget(form.imageFile, {'attr': {'class': 'file-input', 'onchange': 'showFileProgress(this)'}}) }}
+        </div>
+        
+        <!-- File Progress Bar (appears when file is selected) -->
+        <div class="file-progress-container" id="fileProgressContainer">
+            <div class="file-progress-bar">
+                <div class="file-info">
+                    <p class="file-name" id="selectedFileName">fichier.jpg</p>
+                    <p class="file-size" id="selectedFileSize">0 KB</p>
+                </div>
+                <div class="file-actions">
+                    <button type="button" class="download-file-btn">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                            <polyline points="7 10 12 15 17 10"></polyline>
+                            <line x1="12" y1="15" x2="12" y2="3"></line>
+                        </svg>
+                    </button>
+                    <button type="button" class="remove-file-btn" id="removeFileBtn">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <line x1="18" y1="6" x2="6" y2="18"></line>
+                            <line x1="6" y1="6" x2="18" y2="18"></line>
+                        </svg>
+                    </button>
+                </div>
+            </div>
+        </div>
+        
+        <div class="input-row">
+            {{ form_widget(form.name, {'attr': {'class': 'name-input', 'placeholder': 'Nom de l\'image'}}) }}
+            <button type="submit" class="upload-btn">Uploader</button>
+        </div>
+        
+        {{ form_end(form) }}
+    </div>
+
+    <!-- Script interne pour garantir que le script s'exécute après le chargement des éléments -->
+    <script>
+        function showFileProgress(input) {
+            console.log("showFileProgress called");
+            if (input.files && input.files.length > 0) {
+                const file = input.files[0];
+                
+                // Mettre à jour les infos du fichier
+                document.getElementById('selectedFileName').textContent = file.name;
+                
+                // Formater la taille du fichier
+                let sizeText;
+                if (file.size < 1024) {
+                    sizeText = file.size + ' B';
+                } else if (file.size < 1048576) {
+                    sizeText = (file.size / 1024).toFixed(2) + ' KB';
+                } else if (file.size < 1073741824) {
+                    sizeText = (file.size / 1048576).toFixed(2) + ' MB';
+                } else {
+                    sizeText = (file.size / 1073741824).toFixed(2) + ' GB';
+                }
+                document.getElementById('selectedFileSize').textContent = sizeText;
+                
+                // Afficher la barre de progression
+                document.getElementById('fileProgressContainer').style.display = 'block';
+                
+                // Définir le nom par défaut (sans l'extension)
+                const baseName = file.name.split('.').slice(0, -1).join('.');
+                document.getElementById('form_name').value = baseName;
+            }
+        }
+        
+        // Ajouter un écouteur d'événement au bouton de suppression
+        document.getElementById('removeFileBtn').addEventListener('click', function() {
+            document.getElementById('form_imageFile').value = '';
+            document.getElementById('fileProgressContainer').style.display = 'none';
+            document.getElementById('form_name').value = '';
+        });
+    </script>
+    
+    <h2>Images :</h2>
+    <div class="gallery">
+        {% for image in images %}
+            <div class="image-card">
+                <div class="image-container">
+                    <img src="{{ image.url }}" alt="{{ image.name }}">
+                    <button class="download-btn" data-url="{{ image.url }}" data-name="{{ image.name }}">Télécharger</button>
+                </div>
+                <div class="image-info">
+                    <h3 class="image-name">{{ image.name }}</h3>
+                </div>
+            </div>
+        {% else %}
+            <p class="no-images">Aucune image trouvée.</p>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}
