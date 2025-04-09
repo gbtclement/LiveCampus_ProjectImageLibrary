@@ -50,4 +50,19 @@ final class AdminController extends AbstractController
         return $this->redirectToRoute('app_admin_list');
     }
 
+
+    #[Route('/admin/stats', name: 'admin_stats')]
+    public function stats(): Response
+    {
+        $labels = ['Image 1', 'Image 2', 'Image 3', 'Image 4', 'Image 5'];
+        $data = [12, 19, 3, 5, 9];
+
+        $imagesStats = array_map(null, $labels, $data);
+
+        return $this->render('admin/stats.html.twig', [
+            'labels' => $labels,
+            'data' => $data,
+            'imagesStats' => $imagesStats,
+        ]);
+    }
 }
