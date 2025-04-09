@@ -36,8 +36,6 @@ final class PublicController extends AbstractController
                     $this->getParameter('images_directory'),
                     $newFilename
                 );
-
-                $image->setUrl('/uploads/' . $newFilename);
             }
 
             $em->persist($image);

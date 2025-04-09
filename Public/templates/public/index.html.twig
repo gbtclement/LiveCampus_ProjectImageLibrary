@@ -157,6 +157,7 @@
     
     .input-row {
         display: flex;
+        justify-content: space-between;
         gap: 15px;
         margin-top: 20px;
         align-items: center;
@@ -167,6 +168,7 @@
         padding: 12px 15px;
         border: 1px solid #ddd;
         border-radius: 12px;
+        max-width: 250px;
         font-size: 1rem;
         transition: border-color 0.3s;
     }
@@ -188,47 +190,33 @@
     }
 
     .upload-btn:hover {
-        transform: translateY(-2px);
         box-shadow: 0 5px 10px rgba(0, 0, 0, 0.1);
     }
 
     /* Gallery section */
     .gallery {
-        display: grid;
-        grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
-        gap: 25px;
-        margin-top: 30px;
+        column-count: 3;
+    }
+
+    .gallery img {
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+        width: 100%;
+        break-inside: avoid;
+        border-radius: 0px;
+        transition: border-radius 0.3s ease;
+        cursor: pointer; /* Ajoute un curseur pointeur pour indiquer que l'image est cliquable */
+    }
+
+    .gallery img:hover {
+        border-radius: 8px;
     }
 
     .image-card {
         position: relative;
-        border-radius: 12px;
         overflow: hidden;
         background: white;
-        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
         transition: transform 0.3s ease;
-    }
-
-    .image-card:hover {
-        transform: translateY(-5px);
-    }
-
-    .image-container {
-        position: relative;
-        height: 200px;
-        overflow: hidden;
-        border-radius: 12px 12px 0 0;
-    }
-
-    .image-container img {
-        width: 100%;
-        height: 100%;
-        object-fit: cover;
-        transition: transform 0.5s ease;
-    }
-
-    .image-card:hover img {
-        transform: scale(1.05);
+        margin-bottom: 20px; /* Ajoute un espace entre les images */
     }
 
     .image-info {
@@ -261,6 +249,166 @@
     .image-card:hover .download-btn {
         opacity: 1;
         transform: translateX(-50%) translateY(0);
+    }
+
+    /* Modal styles */
+    .modal-overlay {
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background-color: rgba(0, 0, 0, 0.7);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        z-index: 1000;
+        opacity: 0;
+        visibility: hidden;
+        transition: opacity 0.3s ease, visibility 0.3s ease;
+    }
+
+    .modal-overlay.active {
+        opacity: 1;
+        visibility: visible;
+    }
+
+    .modal-container {
+        background-color: white;
+        width: 80%;
+        max-width: 1000px;
+        border-radius: 12px;
+        overflow: hidden;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+        display: flex;
+        flex-direction: column;
+        max-height: 90vh;
+    }
+
+    .modal-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 15px 20px;
+        border-bottom: 1px solid #eee;
+    }
+
+    .modal-title {
+        font-size: 1.4rem;
+        font-weight: 600;
+        margin: 0;
+        background: linear-gradient(to right, #5271ff, #ff56a8);
+        -webkit-background-clip: text;
+        background-clip: text;
+        color: transparent;
+    }
+
+    .modal-close {
+        background: none;
+        border: none;
+        font-size: 1.5rem;
+        cursor: pointer;
+        color: #666;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 32px;
+        height: 32px;
+        border-radius: 50%;
+        transition: background-color 0.2s;
+    }
+
+    .modal-close:hover {
+        background-color: #f1f1f1;
+        color: #333;
+    }
+
+    .modal-body {
+        padding: 20px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        overflow-y: auto;
+    }
+
+    .modal-image {
+        max-width: 100%;
+        max-height: 70vh;
+        border-radius: 8px;
+        margin-bottom: 20px;
+    }
+
+    .modal-info {
+        width: 100%;
+        padding: 15px;
+        background-color: #f9f9f9;
+        border-radius: 8px;
+    }
+
+    .info-row {
+        display: flex;
+        justify-content: space-between;
+        margin-bottom: 10px;
+        font-size: 1rem;
+    }
+
+    .info-label {
+        font-weight: 500;
+        color: #666;
+    }
+
+    .info-value {
+        color: #333;
+    }
+
+    .modal-actions {
+        display: flex;
+        justify-content: flex-end;
+        padding: 15px 20px;
+        border-top: 1px solid #eee;
+        gap: 10px;
+    }
+
+    .modal-btn {
+        padding: 10px 20px;
+        border-radius: 8px;
+        font-weight: 500;
+        cursor: pointer;
+        transition: all 0.2s ease;
+    }
+
+    .download-modal-btn {
+        background: linear-gradient(to right, #5271ff, #ff56a8);
+        color: white;
+        border: none;
+    }
+
+    .download-modal-btn:hover {
+        box-shadow: 0 3px 8px rgba(0, 0, 0, 0.1);
+    }
+
+    .heart-btn {
+        background: none;
+        border: 1px solid #ddd;
+        color: #666;
+        display: flex;
+        align-items: center;
+        gap: 5px;
+    }
+
+    .heart-btn:hover {
+        background-color: #f9f9f9;
+    }
+
+    .heart-icon {
+        fill: none;
+        stroke: currentColor;
+        transition: fill 0.2s;
+    }
+
+    .heart-btn.liked .heart-icon {
+        fill: #ff3d00;
+        stroke: #ff3d00;
     }
 </style>
 {% endblock %}
@@ -384,7 +532,8 @@
         
         // Handle download buttons in gallery
         document.querySelectorAll('.download-btn').forEach(btn => {
-            btn.addEventListener('click', function() {
+            btn.addEventListener('click', function(e) {
+                e.stopPropagation(); // Empêche l'ouverture du modal lors du clic sur le bouton de téléchargement
                 const imgUrl = this.dataset.url;
                 const imgName = this.dataset.name;
                 
@@ -397,13 +546,102 @@
                 document.body.removeChild(link);
             });
         });
+
+        // Modal functionality
+        const modalOverlay = document.getElementById('imageModal');
+        const modalImage = document.getElementById('modalImage');
+        const modalTitle = document.getElementById('modalTitle');
+        const modalImageName = document.getElementById('modalImageName');
+        const modalImageSize = document.getElementById('modalImageSize');
+        const modalImageDate = document.getElementById('modalImageDate');
+        const modalDownloadBtn = document.getElementById('modalDownloadBtn');
+        const heartBtn = document.getElementById('heartBtn');
+        
+        // Function to open modal
+        function openModal(imageUrl, imageName, imageDate) {
+            modalImage.src = imageUrl;
+            modalTitle.textContent = imageName;
+            modalImageName.textContent = imageName;
+            
+            // Get image size (simulate for now)
+            fetch(imageUrl)
+                .then(response => {
+                    const size = response.headers.get('content-length');
+                    modalImageSize.textContent = size ? formatFileSize(parseInt(size)) : 'Inconnu';
+                })
+                .catch(() => {
+                    modalImageSize.textContent = 'Inconnu';
+                });
+            
+            // Set date
+            modalImageDate.textContent = imageDate || new Date().toLocaleDateString();
+            
+            // Set download button
+            modalDownloadBtn.onclick = function() {
+                const link = document.createElement('a');
+                link.href = imageUrl;
+                link.download = imageName;
+                document.body.appendChild(link);
+                link.click();
+                document.body.removeChild(link);
+            };
+            
+            // Show modal
+            modalOverlay.classList.add('active');
+            
+            // Disable body scroll
+            document.body.style.overflow = 'hidden';
+        }
+        
+        // Function to close modal
+        function closeModal() {
+            modalOverlay.classList.remove('active');
+            document.body.style.overflow = '';
+        }
+        
+        // Setup image click listeners
+        document.querySelectorAll('.image-card img').forEach(img => {
+            img.addEventListener('click', function() {
+                const card = this.closest('.image-card');
+                const downloadBtn = card.querySelector('.download-btn');
+                const imageUrl = this.src;
+                const imageName = downloadBtn.dataset.name;
+                
+                // Generate a random date for the example
+                const randomDate = new Date();
+                randomDate.setDate(randomDate.getDate() - Math.floor(Math.random() * 30));
+                const imageDate = randomDate.toLocaleDateString();
+                
+                openModal(imageUrl, imageName, imageDate);
+            });
+        });
+        
+        // Close modal on click outside or close button
+        document.getElementById('modalClose').addEventListener('click', closeModal);
+        modalOverlay.addEventListener('click', function(e) {
+            if (e.target === modalOverlay) {
+                closeModal();
+            }
+        });
+        
+        // Heart button functionality
+        heartBtn.addEventListener('click', function() {
+            this.classList.toggle('liked');
+        });
+
+        // Keyboard functionality
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape' && modalOverlay.classList.contains('active')) {
+                closeModal();
+            }
+        });
     });
 </script>
 {% endblock %}
 
 {% block body %}
 <div class="container">
-    <h1>Galerie publique</h1>
+    <h1>Galerie d'image publique</h1>
     
     <div class="upload-section">
         <h2>Ajouter une image</h2>
@@ -499,21 +737,45 @@
         });
     </script>
     
-    <h2>Images :</h2>
+    <h2>Galleries :</h2>
     <div class="gallery">
         {% for image in images %}
             <div class="image-card">
-                <div class="image-container">
-                    <img src="{{ image.url }}" alt="{{ image.name }}">
-                    <button class="download-btn" data-url="{{ image.url }}" data-name="{{ image.name }}">Télécharger</button>
-                </div>
-                <div class="image-info">
-                    <h3 class="image-name">{{ image.name }}</h3>
-                </div>
+                <img src="{{ image.url }}" alt="{{ image.name }}">
+                <button class="download-btn" data-url="{{ image.url }}" data-name="{{ image.name }}">Télécharger</button>
             </div>
         {% else %}
             <p class="no-images">Aucune image trouvée.</p>
         {% endfor %}
+    </div>
+</div>
+
+<div id="imageModal" class="modal-overlay">
+    <div class="modal-container">
+        <div class="modal-header">
+            <h3 id="modalTitle" class="modal-title">Nom de l'image</h3>
+            <button id="modalClose" class="modal-close">×</button>
+        </div>
+        <div class="modal-body">
+            <img id="modalImage" class="modal-image" src="" alt="Image agrandie">
+            <div class="modal-info">
+                <div class="info-row">
+                    <span class="info-label">Nom:</span>
+                    <span id="modalImageName" class="info-value">image.jpg</span>
+                </div>
+                <div class="info-row">
+                    <span class="info-label">Taille:</span>
+                    <span id="modalImageSize" class="info-value">0 KB</span>
+                </div>
+                <div class="info-row">
+                    <span class="info-label">Date d'ajout:</span>
+                    <span id="modalImageDate" class="info-value">01/01/2025</span>
+                </div>
+            </div>
+        </div>
+        <div class="modal-actions">
+            <button id="modalDownloadBtn" class="modal-btn download-modal-btn">Télécharger</button>
+        </div>
     </div>
 </div>
 {% endblock %}
