@@ -14,6 +14,12 @@ final class MessageController extends AbstractController
     public function __construct(
         private HttpClientInterface $client,
     ) {}
+
+    #[Route('/test', name: 'app_admin')]
+    public function admin(): Response
+    {
+        return $this->render('message/test.html.twig');
+    }
     
     #[Route('/message', name: 'app_message')]
     public function index(MessageBusInterface $bus): Response

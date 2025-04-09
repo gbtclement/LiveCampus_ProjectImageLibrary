@@ -7,7 +7,7 @@ use Symfony\Component\Messenger\Attribute\AsMessage;
 class MailStatistics
 {
     public function __construct(
-        private array $images,
+        private ?array $images,
     ) {
     }
 
