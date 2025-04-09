@@ -52,17 +52,19 @@ final class AdminController extends AbstractController
 
 
     #[Route('/admin/stats', name: 'admin_stats')]
-    public function stats(): Response
+    public function test_stats(HttpClientInterface $client): Response
     {
-        $labels = ['Image 1', 'Image 2', 'Image 3', 'Image 4', 'Image 5'];
-        $data = [12, 19, 3, 5, 9];
+        $response = $client->request('GET', 'http://localhost:8002/api/images/stats');
+        $stats = $response->toArray();
 
+        $labels = array_column($stats, 'name');
+        $data = array_column($stats, 'url');
         $imagesStats = array_map(null, $labels, $data);
 
         return $this->render('admin/stats.html.twig', [
-            'labels' => $labels,
-            'data' => $data,
-            'imagesStats' => $imagesStats,
-        ]);
+                'labels' => $labels,
+                'data' => $data,
+                'imagesStats' => $imagesStats,
+            ]);
     }
 }
