@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Scheduler\Message\MailStatistics;
+use App\Service\ImageService;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Messenger\MessageBusInterface;
@@ -13,6 +14,7 @@ final class MessageController extends AbstractController
 {
     public function __construct(
         private HttpClientInterface $client,
+        private ImageService $imageService,
     ) {}
 
     #[Route('/test', name: 'app_admin')]
@@ -24,11 +26,7 @@ final class MessageController extends AbstractController
     #[Route('/message', name: 'app_message')]
     public function index(MessageBusInterface $bus): Response
     {
-        $response = $this->client->request('GET', 'https://localhost:8002/api/images', [
-            'verify_peer' => false,
-            'verify_host' => false,
-        ]);
-        $images = $response->toArray();
+        $images = $this->imageService->fetchImages();
 
         $bus->dispatch(new MailStatistics($images));
 

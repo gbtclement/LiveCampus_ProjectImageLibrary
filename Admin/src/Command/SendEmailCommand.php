@@ -2,6 +2,7 @@
 namespace App\Command;
 
 use App\Scheduler\Message\MailStatistics;
+use App\Service\ImageService;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
@@ -14,21 +15,19 @@ final class SendEmailCommand extends Command
 {   
     public function __construct(
         private MessageBusInterface $bus,
-        private HttpClientInterface $client
+        private HttpClientInterface $client,
+        private ImageService $imageService
+
     ) {
         parent::__construct();
     }
-    // Créer une class services et injecter mon service ici et faire appel à la méthode 
+
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
-        $response = $this->client->request('GET', 'https://localhost:8002/api/images', [
-            'verify_peer' => false,
-            'verify_host' => false,
-        ]);
-        $images = $response->toArray();
+        $images = $this->imageService->fetchImages();
 
         $this->bus->dispatch(new MailStatistics($images));
 
-        return 0;
+        return Command::SUCCESS;
     }
 }
