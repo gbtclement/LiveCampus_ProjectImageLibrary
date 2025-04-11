@@ -5,6 +5,7 @@ namespace App\Repository;
 use App\Entity\Image;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
+use Symfony\Component\Uid\Uuid;
 
 /**
  * @extends ServiceEntityRepository<Image>
@@ -31,7 +32,7 @@ class ImageRepository extends ServiceEntityRepository
             ->andWhere('i.id = :id')
             ->setParameter('id', $id)
             ->getQuery()
-            ->getOneOrNullResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
+            ->getArrayResult();
     }
 
     public function deleteImageById(string $id)
@@ -43,7 +44,7 @@ class ImageRepository extends ServiceEntityRepository
             ->getQuery()
             ->execute();
     }
-    
+
 
     //    /**
     //     * @return Image[] Returns an array of Image objects

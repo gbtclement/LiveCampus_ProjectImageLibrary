@@ -35,9 +35,7 @@
 							<div class="image-info">
 								<h3 class="image-name">{{ image.name }}</h3>
 								<div class="image-actions">
-									<form method="post" action="{{ path('app_admin_image_hit', {'id': image.id}) }}">
-										<button type="submit" class="btn btn-success">Détails</button>
-									</form>
+									<a class="btn btn-success" href="{{ path('app_admin_image', {'id': image.id}) }}">Détails</a>
 									<form method="post" action="{{ path('app_admin_image_delete', {'id': image.id}) }}">
 										<button type="submit" class="btn btn-danger">Supprimer</button>
 									</form>

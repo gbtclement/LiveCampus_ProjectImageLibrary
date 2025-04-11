@@ -5,6 +5,7 @@ namespace App\Repository;
 use App\Entity\Hit;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
+use App\Entity\Image;
 
 /**
  * @extends ServiceEntityRepository<Hit>
@@ -16,16 +17,6 @@ class HitRepository extends ServiceEntityRepository
         parent::__construct($registry, Hit::class);
     }
 
-    public function addHit($image)
-    {
-        $hit = new Hit();
-        $hit->setImage($image);
-        $hit->setCreatedAt(new \DateTimeImmutable());
-
-        $this->getEntityManager()->persist($hit);
-        $this->getEntityManager()->flush();
-    }
-
     public function deleteHitByImageId(string $id)
     {
         return $this->createQueryBuilder('h')
@@ -35,6 +26,17 @@ class HitRepository extends ServiceEntityRepository
             ->getQuery()
             ->execute();
     }
+
+    public function addHit(Image $image): void
+    {
+        $hit = new Hit();
+        $hit->setImage($image);
+        $hit->setCreatedAt(new \DateTimeImmutable());
+    
+        $this->getEntityManager()->persist($hit);
+        $this->getEntityManager()->flush();
+    }
+    
 
 //    /**
 //     * @return Hit[] Returns an array of Hit objects

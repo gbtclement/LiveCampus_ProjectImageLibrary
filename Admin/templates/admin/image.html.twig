@@ -1,6 +1,6 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Détail de l'image {{ image.id }}{% endblock %}
+{% block title %}Détail de l'image{% endblock %}
 
 {% block stylesheets %}
     {{ parent() }}
@@ -11,6 +11,7 @@
     <div class="admin-container">
         <div class="admin-content">
             <h1>Détails de l'image</h1>
+            
             
             <div class="detail-card">
                 <img src="{{ image.url }}" alt="{{ image.name }}" class="detail-image">

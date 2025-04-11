@@ -13,7 +13,8 @@ class Hit
     #[ORM\Column]
     private ?int $id = null;
 
-    #[ORM\ManyToOne(inversedBy: 'hits')]
+    #[ORM\ManyToOne(targetEntity: Image::class, cascade: ['persist', 'remove'], fetch:'EAGER', inversedBy: 'hits')]
+    #[ORM\JoinColumn(name: 'image_id', referencedColumnName: 'id', onDelete: 'CASCADE')]
     private ?Image $image = null;
 
     #[ORM\Column]
@@ -29,11 +30,9 @@ class Hit
         return $this->image;
     }
 
-    public function setImage(?Image $image): static
+    public function setImage(?Image $image)
     {
         $this->image = $image;
-
-        return $this;
     }
 
     public function getCreatedAt(): ?\DateTimeImmutable

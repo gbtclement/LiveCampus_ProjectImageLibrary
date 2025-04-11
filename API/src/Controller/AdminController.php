@@ -8,6 +8,7 @@ use Symfony\Component\Routing\Attribute\Route;
 use App\Repository\ImageRepository;
 use App\Repository\HitRepository;
 use Symfony\Component\HttpFoundation\JsonResponse;
+use Doctrine\ORM\EntityManagerInterface;
 
 
 final class AdminController extends AbstractController
@@ -29,6 +30,7 @@ final class AdminController extends AbstractController
     #[Route('/api/image/{id}', name: 'app_image', methods: ['GET'])]
     public function image(ImageRepository $image, string $id)
     {
+
         return new JsonResponse($image->getImageById($id));
     }
 
@@ -39,9 +41,9 @@ final class AdminController extends AbstractController
     }
 
     #[Route('/api/hit/{id}', name: 'app_hit', methods: ['GET','POST'])]
-    public function addHitOnImage(ImageRepository $imageRepository, HitRepository $hitRepository, int $id)
+    public function addHitOnImage(ImageRepository $imageRepository, HitRepository $hitRepository, string $id)
     {
-        $image = $imageRepository->find($id);   
+        $image = $imageRepository->find($id);
         return new JsonResponse($hitRepository->addHit($image));
     }
 }

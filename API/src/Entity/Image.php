@@ -6,14 +6,13 @@ use App\Repository\ImageRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
-use Symfony\Component\Validator\Constraints as Assert;
+use Symfony\Component\Uid\Uuid;
 
 #[ORM\Entity(repositoryClass: ImageRepository::class)]
 class Image
 {
     #[ORM\Id]
-    #[Assert\Uuid]
-    #[ORM\Column]
+    #[ORM\Column(length: 32)]
     private string $id;
 
     #[ORM\Column(length: 255)]
@@ -25,12 +24,13 @@ class Image
     /**
      * @var Collection<int, Hit>
      */
-    #[ORM\OneToMany(targetEntity: Hit::class, mappedBy: 'image')]
+    #[ORM\OneToMany(targetEntity: Hit::class, mappedBy: 'image', cascade: ['persist', 'remove'], fetch:'EAGER')]
     private Collection $hits;
 
     public function __construct()
     {
         $this->hits = new ArrayCollection();
+        $this->id = Uuid::v4()->toRfc4122();
     }
 
     public function getId(): string
