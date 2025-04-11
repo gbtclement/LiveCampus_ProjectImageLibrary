@@ -21,17 +21,9 @@ final class PublicController extends AbstractController
     {
 
         dump($request->getMethod());
-        // Créer et gérer le formulaire d'upload d'image
         $image = new Image();
         $form = $this->createForm(ImageType::class, $image);
         $form->handleRequest($request);
-
-        if ($form->isSubmitted()) {
-            dump($form->isSubmitted());
-            dump($form->isValid());
-            dump($form->getErrors(true));
-            dump($form->get('imageFile')->getData());
-        }
 
         if ($form->isSubmitted() && $form->isValid()) {
             $uploadedFile = $form->get('imageFile')->getData();

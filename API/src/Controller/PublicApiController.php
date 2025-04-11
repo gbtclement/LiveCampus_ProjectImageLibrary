@@ -47,7 +47,8 @@ class PublicApiController extends AbstractController
 
         $image = new ImagePublic();
         $image->setName($name);
-        $image->setUrl('/uploads/' . $filename);
+        $image->setUrl($this->getParameter('uploads_base_url') . '/' . $filename);
+
 
         $em->persist($image);
         $em->flush();
