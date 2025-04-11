@@ -35,6 +35,19 @@ class ImageRepository extends ServiceEntityRepository
             ->getArrayResult();
     }
 
+    public function getImagesWithHitCount(): array
+    {
+        return $this->createQueryBuilder('i')
+            ->select('i.name, COUNT(h.id) AS hit_count')
+            ->innerJoin('i.hits', 'h')
+            ->groupBy('i.id')
+            ->orderBy('hit_count', 'DESC')
+            ->setMaxResults(20)
+            ->getQuery()
+            ->getArrayResult();
+    }
+
+
     public function deleteImageById(string $id)
     {
         return $this->createQueryBuilder('i')

@@ -9,6 +9,8 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Doctrine\ORM\EntityManagerInterface;
 use App\Entity\Image;
+use Symfony\Component\HttpFoundation\BinaryFileResponse;
+use Symfony\Component\HttpFoundation\ResponseHeaderBag;
 
 class PublicApiController extends AbstractController
 {
@@ -60,5 +62,23 @@ class PublicApiController extends AbstractController
             'url' => $image->getUrl(),
             'name' => $image->getName(),
         ], 201);
+    }
+
+    #[Route('/api/public/image/{filename}', name: 'app_public_image_file', methods: ['GET'])]
+    public function serveImage(string $filename): BinaryFileResponse
+    {
+        $filePath = $this->getParameter('images_directory') . '/' . $filename;
+
+        if (!file_exists($filePath)) {
+            throw $this->createNotFoundException('Image non trouvée.');
+        }
+
+        $response = new BinaryFileResponse($filePath);
+        $response->setContentDisposition(ResponseHeaderBag::DISPOSITION_ATTACHMENT, $filename);
+
+        // Ajoute manuellement le header CORS ici
+        $response->headers->set('Access-Control-Allow-Origin', 'http://localhost:8000');
+
+        return $response;
     }
 }

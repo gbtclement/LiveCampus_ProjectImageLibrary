@@ -1,0 +1,9 @@
+nelmio_cors:
+    defaults:
+        allow_origin: ['http://localhost:8000']
+        allow_methods: ['GET', 'POST', 'OPTIONS']
+        allow_headers: ['Content-Type']
+        expose_headers: ['Content-Disposition']
+        max_age: 3600
+    paths:
+        '^/uploads/': ~

@@ -34,11 +34,10 @@ final class AdminController extends AbstractController
 
     #[Route('/admin/image/{id}', name: 'app_admin_image', methods:['GET'])]
     public function image($id) {
-        $response = $this->user->request('GET', 'http://localhost:8002/api/image/' . $id);
+        $response = $this->user->request('GET', "http://localhost:8002/api/image/{$id}");
         $image = $response->toArray();
-
         return $this->render('admin/image.html.twig', [
-            'image' => $image[0]
+            'image' => $image
         ]);
     }
 
@@ -50,4 +49,20 @@ final class AdminController extends AbstractController
         return $this->redirectToRoute('app_admin_list');
     }
 
+
+    #[Route('/admin/stats', name: 'admin_stats')]
+    public function test_stats(HttpClientInterface $client): Response
+    {
+        $response = $client->request('GET', 'http://localhost:8002/api/images/stats');
+        $stats = $response->toArray();
+
+        $labels = array_column($stats, 'name');
+        $data = array_column($stats, 'hit_count');
+
+        return $this->render('admin/stats.html.twig', [
+                'labels' => $labels,
+                'data' => $data,
+                'imagesStats' => $stats,
+            ]);
+    }
 }

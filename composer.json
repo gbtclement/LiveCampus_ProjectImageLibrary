@@ -1,0 +1,8 @@
+{
+    "require-dev": {
+        "doctrine/doctrine-fixtures-bundle": "^4.1"
+    },
+    "require": {
+        "nelmio/cors-bundle": "^2.5"
+    }
+}
