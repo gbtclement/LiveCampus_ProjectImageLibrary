@@ -2,19 +2,49 @@
 
 namespace App\Repository;
 
-use App\Entity\ImagePublic;
+use App\Entity\Image;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
+use Symfony\Component\Uid\Uuid;
 
 /**
- * @extends ServiceEntityRepository<ImagePublic>
+ * @extends ServiceEntityRepository<Image>
  */
 class ImageRepository extends ServiceEntityRepository
 {
     public function __construct(ManagerRegistry $registry)
     {
-        parent::__construct($registry, ImagePublic::class);
+        parent::__construct($registry, Image::class);
     }
+
+    public function getAllImages()
+    {
+        return $this->createQueryBuilder('i')
+            ->select('i')
+            ->getQuery()
+            ->getArrayResult();
+    }
+
+    public function getImageById(string $id)
+    {
+        return $this->createQueryBuilder('i')
+            ->select('i')
+            ->andWhere('i.id = :id')
+            ->setParameter('id', $id)
+            ->getQuery()
+            ->getArrayResult();
+    }
+
+    public function deleteImageById(string $id)
+    {
+        return $this->createQueryBuilder('i')
+            ->delete()
+            ->andWhere('i.id = :id')
+            ->setParameter('id', $id)
+            ->getQuery()
+            ->execute();
+    }
+
 
     //    /**
     //     * @return Image[] Returns an array of Image objects

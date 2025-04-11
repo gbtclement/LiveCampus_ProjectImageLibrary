@@ -8,7 +8,7 @@ use App\Repository\ImageRepository;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Doctrine\ORM\EntityManagerInterface;
-use App\Entity\ImagePublic;
+use App\Entity\Image;
 
 class PublicApiController extends AbstractController
 {
@@ -45,7 +45,7 @@ class PublicApiController extends AbstractController
             return new JsonResponse(['error' => 'Erreur lors de l\'enregistrement du fichier.'], 500);
         }
 
-        $image = new ImagePublic();
+        $image = new Image();
         $image->setName($name);
         $image->setUrl($this->getParameter('uploads_base_url') . '/' . $filename);
 
