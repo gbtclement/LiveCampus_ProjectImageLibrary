@@ -34,9 +34,9 @@
                 <tbody>
                     {% for stat in imagesStats %}
                         <tr>
-                            <td>{{ stat[0] }}</td>
-                            <td>{{ stat[1] }}</td>
-                            <td><button class="btn btn-warning">Accéder à l'image</button></td>
+                            <td>{{ stat.name }}</td>
+                            <td>{{ stat.hit_count }}</td>
+                            <td><a href="{{ path('app_admin_list') }}" class="btn btn-primary">Accéder à l'image</a></td>
                         </tr>
                     {% endfor %}
                 </tbody>
@@ -80,6 +80,7 @@
                     scales: {
                         y: {
                             beginAtZero: true,
+                            max: 20,
                             ticks: {
                                 precision: 0
                             }

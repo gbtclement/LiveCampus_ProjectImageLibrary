@@ -10,26 +10,26 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 
 final class ImageController extends AbstractController
 {
-    #[Route('/image', name: 'app_image')]
-    public function index(): Response
+    #[Route('/api/image/{id}', name: 'app_image', methods: ['GET'])]
+    public function image(ImageRepository $imageRepository, string $id): JsonResponse
     {
-        return $this->render('image/index.html.twig', [
-            'controller_name' => 'ImageController',
-        ]);
+        // Utilisation du repository pour récupérer l'image par ID
+        $image = $imageRepository->getImageById($id);
+
+        // Si l'image n'est pas trouvée, on retourne une erreur 404
+        if (empty($image)) {
+            return new JsonResponse(['error' => 'Image not found'], 404);
+        }
+
+        // Retourner l'image sous forme de JSON
+        return new JsonResponse($image[0]); // On retourne la première image trouvée (en cas de multiple résultats)
     }
 
     #[Route('/api/images/stats', name: 'api_images_stats')]
     public function stats(ImageRepository $imageRepository): JsonResponse
     {
-        $images = $imageRepository->findAll();
+        $stats = $imageRepository->getImagesWithHitCount();
     
-        $data = array_map(function ($image) {
-            return [
-                'name' => $image->getName(),
-                'url' => $image->getUrl()
-            ];
-        }, $images);
-    
-        return $this->json($data);
+        return $this->json($stats);
     }
 }
