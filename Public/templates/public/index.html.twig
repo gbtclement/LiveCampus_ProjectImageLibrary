@@ -43,17 +43,46 @@
             {{ form_end(form) }}
         </div>
 
+        <script>
+document.addEventListener('DOMContentLoaded', () => {
+    document.querySelectorAll('.download-btn').forEach(btn => {
+        btn.addEventListener('click', async (e) => {
+            e.preventDefault();
+
+            const url = btn.dataset.url;
+            const filename = btn.dataset.name || 'image.jpg';
+
+            try {
+                const response = await fetch(url);
+                const blob = await response.blob();
+
+                const link = document.createElement('a');
+                link.href = URL.createObjectURL(blob);
+                link.download = filename;
+                document.body.appendChild(link);
+                link.click();
+                document.body.removeChild(link);
+            } catch (err) {
+                console.error('Erreur lors du téléchargement :', err);
+            }
+        });
+    });
+});
+</script>
+
+
         <h2>Galleries :</h2>
-        <div class="gallery">
-            {% for image in images %}
-                <div class="image-card">
-                    <img src="{{ image.url }}" alt="{{ image.name }}">
-                    <button class="download-btn" data-url="{{ image.url }}" data-name="{{ image.name }}">Télécharger</button>
-                </div>
-            {% else %}
-                <p class="no-images">Aucune image trouvée.</p>
-            {% endfor %}
-        </div>
+    <div class="gallery">
+        {% for image in images %}
+            <div class="image-card">
+                <img src="{{ image.url }}" alt="{{ image.name }}">
+                <a id="download-btn" href="{{ path('app_public_image_hit', {'id': image.id}) }}" class="download-btn" data-url="{{ image.url }}" data-name="{{ image.name }}">Télécharger</a>
+            </div>
+        {% else %}
+            <p class="no-images">Aucune image trouvée.</p>
+        {% endfor %}
+    </div>
+    
     </div>
 {% endblock %}
 

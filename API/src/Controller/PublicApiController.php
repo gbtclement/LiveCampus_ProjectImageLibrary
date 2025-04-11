@@ -19,6 +19,7 @@ class PublicApiController extends AbstractController
 
         $data = array_map(function ($image) {
             return [
+                'id' => $image->getId(),
                 'name' => $image->getName(),
                 'url' => $image->getUrl()
             ];
@@ -55,6 +56,7 @@ class PublicApiController extends AbstractController
 
         return new JsonResponse([
             'message' => 'Image enregistrée avec succès',
+            'id' => $image->getId(),
             'url' => $image->getUrl(),
             'name' => $image->getName(),
         ], 201);
