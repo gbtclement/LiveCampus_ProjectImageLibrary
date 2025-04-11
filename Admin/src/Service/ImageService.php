@@ -11,7 +11,7 @@ class ImageService
 
     public function fetchImages(): array
     {
-        $response = $this->client->request('GET', 'https://localhost:8002/api/images', [
+        $response = $this->client->request('GET', 'https://localhost:8002/api/images/stats', [
             'verify_peer' => false,
             'verify_host' => false,
         ]);

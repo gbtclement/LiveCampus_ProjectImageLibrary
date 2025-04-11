@@ -11,7 +11,7 @@ class MailStatistics
     ) {
     }
 
-    public function getImages(): array
+    public function getImagesWithHitCount(): array
     {
         return $this->images;
     }
