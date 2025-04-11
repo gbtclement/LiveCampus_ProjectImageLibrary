@@ -27,7 +27,7 @@ final class AdminController extends AbstractController
         return new JsonResponse($image->getAllImages());
     }
 
-    #[Route('/api/image/{id}', name: 'app_image', methods: ['GET'])]
+    #[Route('/api/images/{id}', name: 'app_image', methods: ['GET'])]
     public function image(ImageRepository $image, string $id)
     {
 
