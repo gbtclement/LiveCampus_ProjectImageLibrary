@@ -16,6 +16,12 @@ use Symfony\Component\Mime\Part\Multipart\FormDataPart;
 
 final class PublicController extends AbstractController
 {
+
+    public function __construct(
+        private HttpClientInterface $user,
+    ) {
+    }
+
     #[Route('/public', name: 'app_public', methods: ['GET', 'POST'])]
     public function getImages(Request $request, EntityManagerInterface $em, HttpClientInterface $client): Response
     {
@@ -57,6 +63,14 @@ final class PublicController extends AbstractController
             'images' => $images,
             'form' => $form->createView(),
         ]);
+    }
+
+    #[Route('/public/image/hit/{id}', name: 'app_public_image_hit', methods: ['GET', 'POST'])]
+    public function addHit($id): Response
+    {
+        $this->user->request('POST', 'http://localhost:8002/api/hit/' . $id);
+
+        return $this->redirectToRoute('app_public');
     }
 }
 
