@@ -742,7 +742,7 @@
         {% for image in images %}
             <div class="image-card">
                 <img src="{{ image.url }}" alt="{{ image.name }}">
-                <button class="download-btn" data-url="{{ image.url }}" data-name="{{ image.name }}">Télécharger</button>
+                <a href="{{ path('app_public_image_hit', {'id': image.id}) }}" class="download-btn" data-url="{{ image.url }}" data-name="{{ image.name }}">Télécharger</a>
             </div>
         {% else %}
             <p class="no-images">Aucune image trouvée.</p>

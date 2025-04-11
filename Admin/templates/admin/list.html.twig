@@ -1,0 +1,56 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Liste des Images
+{% endblock %}
+
+{% block stylesheets %}
+	{{ parent() }}
+	<link rel="stylesheet" href="{{ asset('styles/admin.css') }}">
+{% endblock %}
+
+{% block body %}
+	<div class="admin-container">
+		<div class="admin-content">
+			<h1>Liste des images</h1>
+
+			<div class="admin-actions">
+				<div class="search-box">
+					<input type="text" class="search-input form-control" placeholder="Rechercher...">
+					<button class="search-btn">🔍</button>
+				</div>
+
+				<a href="{{ path('app_admin') }}" class="btn btn-primary">
+					<span>🏠</span>
+					Accueil admin
+				</a>
+			</div>
+
+			<div class="image-grid">
+				{% if images|length > 0 %}
+					{% for image in images %}
+						<div class="image-card">
+							<div class="image-container">
+								<img src="{{ image.url }}" alt="{{ image.name }}">
+							</div>
+							<div class="image-info">
+								<h3 class="image-name">{{ image.name }}</h3>
+								<div class="image-actions">
+									<a class="btn btn-success" href="{{ path('app_admin_image', {'id': image.id}) }}">Détails</a>
+									<form method="post" action="{{ path('app_admin_image_delete', {'id': image.id}) }}">
+										<button type="submit" class="btn btn-danger">Supprimer</button>
+									</form>
+								</div>
+							</div>
+						</div>
+					{% endfor %}
+				{% else %}
+					<div class="empty-state">
+						<div class="empty-icon">🖼️</div>
+						<h2>Pas d'images disponibles</h2>
+						<p>Aucune image n'a été téléchargée pour le moment.</p>
+					</div>
+				{% endif %}
+			</div>
+		</div>
+	</div>
+{% endblock %}

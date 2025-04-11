@@ -11,9 +11,15 @@ use App\Entity\Image;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\String\Slugger\SluggerInterface;
+use Symfony\Contracts\HttpClient\HttpClientInterface;
 
 final class PublicController extends AbstractController
 {
+
+    public function __construct(
+        private HttpClientInterface $user,
+    ) {}
+
     #[Route('/public', name: 'app_public')]
     public function index(
         Request $request,
@@ -37,7 +43,8 @@ final class PublicController extends AbstractController
                     $newFilename
                 );
             }
-
+            
+            $image->setUrl("http://127.0.0.1:8000/uploads/" . '/' . $newFilename);
             $em->persist($image);
             $em->flush();
 
@@ -51,4 +58,13 @@ final class PublicController extends AbstractController
             'form' => $form->createView(),
         ]);
     }
+
+    #[Route('/public/image/hit/{id}', name: 'app_public_image_hit', methods:['GET', 'POST'])]
+    public function addHit($id): Response    
+    {
+        $this->user->request('POST', 'http://localhost:8002/api/hit/' . $id);
+        
+        return $this->redirectToRoute('app_public');
+    }
+
 }

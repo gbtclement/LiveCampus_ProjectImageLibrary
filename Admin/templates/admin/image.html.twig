@@ -1,0 +1,56 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Détail de l'image{% endblock %}
+
+{% block stylesheets %}
+    {{ parent() }}
+    <link rel="stylesheet" href="{{ asset('styles/admin.css') }}">
+{% endblock %}
+
+{% block body %}
+    <div class="admin-container">
+        <div class="admin-content">
+            <h1>Détails de l'image</h1>
+            
+            
+            <div class="detail-card">
+                <img src="{{ image.url }}" alt="{{ image.name }}" class="detail-image">
+                
+                <div class="detail-info">
+                    <h2>{{ image.name }}</h2>
+                    
+                    <div class="detail-property">
+                        <span class="property-label">ID</span>
+                        <span class="property-value">{{ image.id }}</span>
+                    </div>
+                    
+                    {% if image.uploadDate is defined %}
+                    <div class="detail-property">
+                        <span class="property-label">Date d'upload</span>
+                        <span class="property-value">{{ image.uploadDate|date('d/m/Y H:i') }}</span>
+                    </div>
+                    {% endif %}
+                    
+                    {% if image.fileSize is defined %}
+                    <div class="detail-property">
+                        <span class="property-label">Taille du fichier</span>
+                        <span class="property-value">{{ image.fileSize }}</span>
+                    </div>
+                    {% endif %}
+                    
+                    <div class="detail-actions">
+                        <a href="{{ path('app_admin_list') }}" class="btn btn-secondary">
+                            <span>🔙</span> Retour à la liste
+                        </a>
+                        
+                        <form method="post" action="{{ path('app_admin_image_delete', {'id': image.id}) }}">
+                            <button type="submit" class="btn btn-danger">
+                                <span>🗑️</span> Supprimer
+                            </button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
