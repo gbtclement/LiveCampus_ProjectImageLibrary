@@ -10,7 +10,7 @@ use Symfony\Component\Scheduler\RecurringMessage;
 use Symfony\Component\Scheduler\Schedule;
 use Symfony\Component\Scheduler\ScheduleProviderInterface;
 
-#[AsSchedule('test')]
+#[AsSchedule('email')]
 class WeeklyMailTask implements ScheduleProviderInterface
 {
     public function __construct(
@@ -22,10 +22,9 @@ class WeeklyMailTask implements ScheduleProviderInterface
     public function getSchedule(): Schedule
     {
         $images = $this->imageService->fetchImages();
-        // voir pour appeler une fonction à la place de this->bus->dispatch
         
         return (new Schedule())->add(
-            RecurringMessage::every('5 seconds', $this->bus->dispatch(new MailStatistics($images))),
+            RecurringMessage::every('1 week', $this->bus->dispatch(new MailStatistics($images))),
         );
     }
 }

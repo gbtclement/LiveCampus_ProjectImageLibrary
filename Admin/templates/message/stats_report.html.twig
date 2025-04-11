@@ -5,15 +5,15 @@
 <table>
     <thead>
         <tr>
-            <th>Image</th>
-            <th>Url</th>
+            <th>Nom</th>
+            <th>Nombre de téléchargements</th>
         </tr>
     </thead>
     <tbody>
     {% for image in images %}
         <tr>
             <td>{{ image.name }}</td>
-            <td>{{ image.url }}</td>
+            <td>{{ image.hit_count }}</td>
         </tr>
     {% endfor %}
     </tbody>

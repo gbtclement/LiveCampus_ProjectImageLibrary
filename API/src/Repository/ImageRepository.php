@@ -41,6 +41,8 @@ class ImageRepository extends ServiceEntityRepository
             ->select('i.name, COUNT(h.id) AS hit_count')
             ->innerJoin('i.hits', 'h')
             ->groupBy('i.id')
+            ->orderBy('hit_count', 'DESC')
+            ->setMaxResults(20)
             ->getQuery()
             ->getArrayResult();
     }
@@ -81,10 +83,4 @@ class ImageRepository extends ServiceEntityRepository
     //            ->getOneOrNullResult()
     //        ;
     //    }
-    public function getAllImages(): array {
-        return $this->createQueryBuilder('i')
-            ->select('i.id, i.name, i.url')
-            ->getQuery()
-            ->getArrayResult();
-    }
 }

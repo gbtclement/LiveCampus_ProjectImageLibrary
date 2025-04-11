@@ -17,21 +17,13 @@ final class MessageController extends AbstractController
         private ImageService $imageService,
     ) {}
 
-    #[Route('/test', name: 'app_admin')]
-    public function admin(): Response
-    {
-        return $this->render('message/test.html.twig');
-    }
-    
-    #[Route('/message', name: 'app_message')]
+    #[Route('/admin/message', name: 'app_message')]
     public function index(MessageBusInterface $bus): Response
     {
         $images = $this->imageService->fetchImages();
 
         $bus->dispatch(new MailStatistics($images));
 
-        return $this->render('message/index.html.twig', [
-            'controller_name' => 'MessageController',
-        ]);
+        return $this->redirectToRoute('app_admin_list');
     }
 }

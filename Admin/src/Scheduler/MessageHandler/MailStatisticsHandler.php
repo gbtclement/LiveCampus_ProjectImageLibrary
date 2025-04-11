@@ -22,7 +22,7 @@ class MailStatisticsHandler
         ->subject('Rapport hebdomadaire des images les plus téléchargées')
         ->htmlTemplate('message/stats_report.html.twig')
         ->context([
-            'images' => $message->getImages()
+            'images' => $message->getImagesWithHitCount()
         ]);
 
         $this->mailer->send($email);
